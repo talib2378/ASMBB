@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>اپنا سوشل میڈیا کا اپنا بلڈ بینک</title>
+  <style>
+    body {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f8ff;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    header img {
+      max-height: 80px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 10px 0;
+      font-size: 24px;
+      color: #000;
+    }
+    .whatsapp {
+      margin: 5px;
+      font-size: 18px;
+    }
+    .whatsapp a {
+      text-decoration: none;
+      color: green;
+      margin: 0 10px;
+    }
+    .container {
+      padding: 20px;
+    }
+    .search-bar {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .add-button {
+      background: #28a745;
+      color: white;
+      border: none;
+      font-size: 24px;
+      padding: 5px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .form-section {
+      display: none;
+      margin-top: 20px;
+      background: #e6f7ff;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .form-section input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    .form-section button {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    .donor-list {
+      margin-top: 20px;
+    }
+    .donor {
+      background: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 20px;
+      }
+      .search-bar {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="لوگو">
+    <h1>اپنا سوشل میڈیا کا اپنا بلڈ بینک</h1>
+    <div class="whatsapp">
+      <a href="https://wa.me/923006267517" target="_blank">📱 03006267517</a>
+      <a href="https://wa.me/923174036186" target="_blank">📱 03174036186</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="نام، بلڈ گروپ یا شہر تلاش کریں">
+      <button class="add-button" onclick="toggleForm()">+</button>
+    </div>
+
+    <div class="form-section" id="formSection">
+      <input type="text" id="name" placeholder="نام">
+      <input type="text" id="bloodGroup" placeholder="بلڈ گروپ (مثلاً B+)">
+      <input type="text" id="city" placeholder="شہر">
+      <input type="text" id="phone" placeholder="فون نمبر">
+      <button onclick="addDonor()">محفوظ کریں</button>
+    </div>
+
+    <div class="donor-list" id="donorList">
+      <!-- Donors will appear here -->
+    </div>
+  </div>
+
+  <script>
+    const donors = [];
+
+    function toggleForm() {
+      const form = document.getElementById('formSection');
+      form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+    }
+
+    function addDonor() {
+      const name = document.getElementById('name').value.trim();
+      const bloodGroup = document.getElementById('bloodGroup').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (name && bloodGroup && city && phone) {
+        const donor = { name, bloodGroup, city, phone };
+        donors.push(donor);
+        renderDonors(donors);
+        clearForm();
+      } else {
+        alert("براہ کرم تمام فیلڈز پُر کریں");
+      }
+    }
+
+    function clearForm() {
+      document.getElementById('name').value = '';
+      document.getElementById('bloodGroup').value = '';
+      document.getElementById('city').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('formSection').style.display = 'none';
+    }
+
+    function renderDonors(list) {
+      const container = document.getElementById('donorList');
+      container.innerHTML = '';
+      list.forEach(donor => {
+        const div = document.createElement('div');
+        div.className = 'donor';
+        div.innerHTML = `<strong>${donor.name}</strong> - ${donor.bloodGroup} - ${donor.city} - ${donor.phone}`;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const value = this.value.toLowerCase();
+      const filtered = donors.filter(d =>
+        d.name.toLowerCase().includes(value) ||
+        d.bloodGroup.toLowerCase().includes(value) ||
+        d.city.toLowerCase().includes(value)
+      );
+      renderDonors(filtered);
+    });
+  </script>
+
+</body>
+</html>
